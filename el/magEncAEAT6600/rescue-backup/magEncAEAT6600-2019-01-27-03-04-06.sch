@@ -1,0 +1,501 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:aeat-6600
+LIBS:magneticEncTest-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L AEAT-6600-T16 U1
+U 1 1 55F942BC
+P 3300 3650
+F 0 "U1" H 4000 3150 60  0000 C CNN
+F 1 "AEAT-6600-T16" H 2950 3150 60  0000 C CNN
+F 2 "Housings_SSOP:TSSOP-16_4.4x5mm_Pitch0.65mm" H 3350 3650 60  0001 C CNN
+F 3 "" H 3350 3650 60  0000 C CNN
+	1    3300 3650
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C2
+U 1 1 55F943D0
+P 4900 3050
+F 0 "C2" H 4925 3150 50  0000 L CNN
+F 1 "10uF" H 4925 2950 50  0000 L CNN
+F 2 "Capacitors_SMD:C_1210_HandSoldering" H 4938 2900 30  0001 C CNN
+F 3 "" H 4900 3050 60  0000 C CNN
+	1    4900 3050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5500 3300 4300 3300
+$Comp
+L GND #PWR01
+U 1 1 55F94545
+P 4900 2750
+F 0 "#PWR01" H 4900 2500 50  0001 C CNN
+F 1 "GND" H 4900 2600 50  0000 C CNN
+F 2 "" H 4900 2750 60  0000 C CNN
+F 3 "" H 4900 2750 60  0000 C CNN
+	1    4900 2750
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4900 2900 4900 2750
+Text Notes 5200 3250 1    60   ~ 0
+use ceramic cap
+$Comp
+L +3V3 #PWR02
+U 1 1 55F94577
+P 5500 2300
+F 0 "#PWR02" H 5500 2150 50  0001 C CNN
+F 1 "+3V3" H 5500 2440 50  0000 C CNN
+F 2 "" H 5500 2300 60  0000 C CNN
+F 3 "" H 5500 2300 60  0000 C CNN
+	1    5500 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5500 2300 5500 3300
+Connection ~ 4900 3300
+$Comp
+L C C1
+U 1 1 55FBDACE
+P 4550 3050
+F 0 "C1" H 4575 3150 50  0000 L CNN
+F 1 "100nF" H 4575 2950 50  0000 L CNN
+F 2 "Capacitors_SMD:C_1206_HandSoldering" H 4588 2900 30  0001 C CNN
+F 3 "" H 4550 3050 60  0000 C CNN
+	1    4550 3050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4550 3200 4550 3400
+Connection ~ 4550 3300
+Wire Wire Line
+	4550 3400 4300 3400
+Wire Wire Line
+	4900 3300 4900 3200
+$Comp
+L GND #PWR03
+U 1 1 55FBDB22
+P 4550 2750
+F 0 "#PWR03" H 4550 2500 50  0001 C CNN
+F 1 "GND" H 4550 2600 50  0000 C CNN
+F 2 "" H 4550 2750 60  0000 C CNN
+F 3 "" H 4550 2750 60  0000 C CNN
+	1    4550 2750
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4550 2750 4550 2900
+$Comp
+L GND #PWR04
+U 1 1 55FBDB93
+P 1500 3900
+F 0 "#PWR04" H 1500 3650 50  0001 C CNN
+F 1 "GND" H 1500 3750 50  0000 C CNN
+F 2 "" H 1500 3900 60  0000 C CNN
+F 3 "" H 1500 3900 60  0000 C CNN
+	1    1500 3900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1500 3900 1500 3800
+Wire Wire Line
+	1500 3800 2350 3800
+NoConn ~ 2350 3500
+NoConn ~ 2350 4000
+NoConn ~ 2350 3300
+NoConn ~ 2350 3400
+$Comp
+L R R3
+U 1 1 55FBE1A0
+P 5850 3000
+F 0 "R3" V 5930 3000 50  0000 C CNN
+F 1 "47K" V 5850 3000 50  0000 C CNN
+F 2 "Resistors_SMD:R_1206_HandSoldering" V 5780 3000 30  0001 C CNN
+F 3 "" H 5850 3000 30  0000 C CNN
+	1    5850 3000
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4300 3500 4650 3500
+$Comp
+L GND #PWR05
+U 1 1 55FBE25E
+P 5850 2650
+F 0 "#PWR05" H 5850 2400 50  0001 C CNN
+F 1 "GND" H 5850 2500 50  0000 C CNN
+F 2 "" H 5850 2650 60  0000 C CNN
+F 3 "" H 5850 2650 60  0000 C CNN
+	1    5850 2650
+	-1   0    0    1   
+$EndComp
+Connection ~ 4650 3500
+Wire Wire Line
+	4650 3500 4650 3400
+Wire Wire Line
+	4300 3600 5050 3600
+Wire Wire Line
+	5050 3600 5050 3800
+Wire Wire Line
+	5050 3800 5750 3800
+$Comp
+L C C3
+U 1 1 55FBE476
+P 5600 4100
+F 0 "C3" H 5625 4200 50  0000 L CNN
+F 1 "100nF" H 5625 4000 50  0000 L CNN
+F 2 "Capacitors_SMD:C_1206_HandSoldering" H 5638 3950 30  0001 C CNN
+F 3 "" H 5600 4100 60  0000 C CNN
+	1    5600 4100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5600 3800 5600 3950
+Connection ~ 5600 3800
+$Comp
+L GND #PWR06
+U 1 1 55FBE50B
+P 5600 4400
+F 0 "#PWR06" H 5600 4150 50  0001 C CNN
+F 1 "GND" H 5600 4250 50  0000 C CNN
+F 2 "" H 5600 4400 60  0000 C CNN
+F 3 "" H 5600 4400 60  0000 C CNN
+	1    5600 4400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5600 4250 5600 4400
+Wire Wire Line
+	4300 3700 4900 3700
+Wire Wire Line
+	4900 3700 4900 3900
+$Comp
+L R R2
+U 1 1 55FBE671
+P 4900 4050
+F 0 "R2" V 4980 4050 50  0000 C CNN
+F 1 "47K" V 4900 4050 50  0000 C CNN
+F 2 "Resistors_SMD:R_1206_HandSoldering" V 4830 4050 30  0001 C CNN
+F 3 "" H 4900 4050 30  0000 C CNN
+	1    4900 4050
+	-1   0    0    1   
+$EndComp
+$Comp
+L GND #PWR07
+U 1 1 55FBE710
+P 4900 4300
+F 0 "#PWR07" H 4900 4050 50  0001 C CNN
+F 1 "GND" H 4900 4150 50  0000 C CNN
+F 2 "" H 4900 4300 60  0000 C CNN
+F 3 "" H 4900 4300 60  0000 C CNN
+	1    4900 4300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 4200 4900 4300
+Text Label 4300 3500 0    60   ~ 0
+PwrDwn
+Text Label 5750 3800 2    60   ~ 0
+VPP=VDDor6.5VDC
+Text Label 4300 3700 0    60   ~ 0
+PROG
+Text Label 5500 2400 2    60   ~ 0
+VDD
+Wire Wire Line
+	2350 3900 2000 3900
+Wire Wire Line
+	2000 3900 2000 4500
+$Comp
+L GND #PWR08
+U 1 1 56014C2B
+P 2000 5150
+F 0 "#PWR08" H 2000 4900 50  0001 C CNN
+F 1 "GND" H 2000 5000 50  0000 C CNN
+F 2 "" H 2000 5150 60  0000 C CNN
+F 3 "" H 2000 5150 60  0000 C CNN
+	1    2000 5150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2000 4800 2000 5150
+$Comp
+L CONN_01X02 P1
+U 1 1 56014FC1
+P 1900 3350
+F 0 "P1" H 1900 3500 50  0000 C CNN
+F 1 "cMAG_Hi/Lo" V 2000 3350 50  0000 C CNN
+F 2 "conSMD:conSMD_X2" H 1900 3350 60  0001 C CNN
+F 3 "" H 1900 3350 60  0000 C CNN
+	1    1900 3350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1950 3550 1950 3600
+Wire Wire Line
+	1950 3600 2350 3600
+Wire Wire Line
+	2350 3700 1850 3700
+Wire Wire Line
+	1850 3700 1850 3550
+$Comp
+L R R1
+U 1 1 560164D9
+P 2000 4650
+F 0 "R1" V 2080 4650 50  0000 C CNN
+F 1 "47K" V 2000 4650 50  0000 C CNN
+F 2 "Resistors_SMD:R_1206_HandSoldering" V 1930 4650 30  0001 C CNN
+F 3 "" H 2000 4650 30  0000 C CNN
+	1    2000 4650
+	-1   0    0    1   
+$EndComp
+Text Label 6100 3700 2    60   ~ 0
+VDD
+Text Label 2000 3900 0    60   ~ 0
+ALIGN
+Text Notes 6000 5800 0    60   ~ 0
+Here connect a stepUp 5 -> 6.5 VDC ( for OTP programming)\nor connect VDD with VPP (for normal operation)
+Wire Wire Line
+	4300 4000 4400 4000
+Wire Wire Line
+	4400 4000 4400 4500
+Wire Wire Line
+	4300 3900 4500 3900
+Wire Wire Line
+	4500 3900 4500 4500
+Wire Wire Line
+	5850 3150 5850 3400
+Wire Wire Line
+	5850 2850 5850 2650
+Wire Wire Line
+	4300 3800 4600 3800
+Wire Wire Line
+	4600 3800 4600 4500
+$Comp
+L PWR_FLAG #FLG09
+U 1 1 56018991
+P 5400 2750
+F 0 "#FLG09" H 5400 2845 50  0001 C CNN
+F 1 "PWR_FLAG" H 5400 2930 50  0000 C CNN
+F 2 "" H 5400 2750 60  0000 C CNN
+F 3 "" H 5400 2750 60  0000 C CNN
+	1    5400 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5400 2750 5400 3300
+Connection ~ 5400 3300
+$Comp
+L PWR_FLAG #FLG010
+U 1 1 56018B87
+P 5300 3650
+F 0 "#FLG010" H 5300 3745 50  0001 C CNN
+F 1 "PWR_FLAG" H 5300 3830 50  0000 C CNN
+F 2 "" H 5300 3650 60  0000 C CNN
+F 3 "" H 5300 3650 60  0000 C CNN
+	1    5300 3650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 3650 5300 3800
+Connection ~ 5300 3800
+$Comp
+L PWR_FLAG #FLG011
+U 1 1 56018D77
+P 6100 4350
+F 0 "#FLG011" H 6100 4445 50  0001 C CNN
+F 1 "PWR_FLAG" H 6100 4530 50  0000 C CNN
+F 2 "" H 6100 4350 60  0000 C CNN
+F 3 "" H 6100 4350 60  0000 C CNN
+	1    6100 4350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6100 4350 5600 4350
+Connection ~ 5600 4350
+$Comp
+L CONN_01X04 P5
+U 1 1 5601A885
+P 6300 3850
+F 0 "P5" H 6300 4100 50  0000 C CNN
+F 1 "cStepUpConverter" V 6400 3850 50  0000 C CNN
+F 2 "conSMD:conSMD_x4" H 6300 3850 60  0001 C CNN
+F 3 "" H 6300 3850 60  0000 C CNN
+	1    6300 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5750 3800 5750 4000
+Wire Wire Line
+	5750 4000 6100 4000
+$Comp
+L GND #PWR012
+U 1 1 5601AA2D
+P 6000 3850
+F 0 "#PWR012" H 6000 3600 50  0001 C CNN
+F 1 "GND" H 6000 3700 50  0000 C CNN
+F 2 "" H 6000 3850 60  0000 C CNN
+F 3 "" H 6000 3850 60  0000 C CNN
+	1    6000 3850
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6000 3800 6000 3900
+Wire Wire Line
+	6000 3800 6100 3800
+Wire Wire Line
+	6000 3900 6100 3900
+Connection ~ 6000 3850
+Wire Notes Line
+	6550 3800 7300 3800
+Wire Notes Line
+	7300 3800 7300 5450
+Text Notes 6000 6150 0    60   ~ 0
+StepUp converter: MC34063ABD ( de la ST )\nTME: http://www.tme.eu/ro/details/mc34063abd/regulatoare-de-tensiune-circuite-dc-dc/st-microelectronics/  RON: 2.16\nNote: are si schema si layout PCB inclus
+$Comp
+L CONN_01X04 P3
+U 1 1 5601B1C4
+P 4450 4700
+F 0 "P3" H 4450 4950 50  0000 C CNN
+F 1 "cSSI" V 4550 4700 50  0000 C CNN
+F 2 "conSMD:conSMD_x4" H 4450 4700 60  0001 C CNN
+F 3 "" H 4450 4700 60  0000 C CNN
+	1    4450 4700
+	0    1    1    0   
+$EndComp
+$Comp
+L GND #PWR013
+U 1 1 5601B2E6
+P 4000 4500
+F 0 "#PWR013" H 4000 4250 50  0001 C CNN
+F 1 "GND" H 4000 4350 50  0000 C CNN
+F 2 "" H 4000 4500 60  0000 C CNN
+F 3 "" H 4000 4500 60  0000 C CNN
+	1    4000 4500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4000 4500 4000 4300
+Wire Wire Line
+	4000 4300 4300 4300
+Wire Wire Line
+	4300 4300 4300 4500
+$Comp
+L CONN_01X02 P4
+U 1 1 5601B70E
+P 6050 2250
+F 0 "P4" H 6050 2400 50  0000 C CNN
+F 1 "cPwr3.3VDC" V 6150 2250 50  0000 C CNN
+F 2 "conSMD:conSMD_X2" H 6050 2250 60  0001 C CNN
+F 3 "" H 6050 2250 60  0000 C CNN
+	1    6050 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5850 2200 5600 2200
+Wire Wire Line
+	5600 2200 5600 2400
+Wire Wire Line
+	5600 2400 5500 2400
+Connection ~ 5500 2400
+Wire Wire Line
+	5850 2300 5700 2300
+Wire Wire Line
+	5700 2300 5700 2350
+$Comp
+L GND #PWR014
+U 1 1 5601B809
+P 5700 2350
+F 0 "#PWR014" H 5700 2100 50  0001 C CNN
+F 1 "GND" H 5700 2200 50  0000 C CNN
+F 2 "" H 5700 2350 60  0000 C CNN
+F 3 "" H 5700 2350 60  0000 C CNN
+	1    5700 2350
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X04 P2
+U 1 1 56025788
+P 3150 5500
+F 0 "P2" H 3150 5750 50  0000 C CNN
+F 1 "cAlignProgPwrDwn" V 3250 5500 50  0000 C CNN
+F 2 "conSMD:conSMD_x4" H 3150 5500 60  0001 C CNN
+F 3 "" H 3150 5500 60  0000 C CNN
+	1    3150 5500
+	1    0    0    -1  
+$EndComp
+Text Label 2950 5350 2    60   ~ 0
+ALIGN
+Text Label 2950 5450 2    60   ~ 0
+PROG
+Text Label 2950 5550 2    60   ~ 0
+PwrDwn
+$Comp
+L GND #PWR015
+U 1 1 56025B05
+P 2800 5700
+F 0 "#PWR015" H 2800 5450 50  0001 C CNN
+F 1 "GND" H 2800 5550 50  0000 C CNN
+F 2 "" H 2800 5700 60  0000 C CNN
+F 3 "" H 2800 5700 60  0000 C CNN
+	1    2800 5700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2800 5700 2800 5650
+Wire Wire Line
+	2800 5650 2950 5650
+Wire Wire Line
+	5850 3400 4650 3400
+Text Label 4300 3800 0    60   ~ 0
+NCS
+Text Label 4300 3900 0    60   ~ 0
+CLK
+Text Label 4300 4000 0    60   ~ 0
+DI/DO
+Text Label 2350 3600 2    60   ~ 0
+MAG_HI
+Text Label 2350 3700 2    60   ~ 0
+MAG_LO
+$EndSCHEMATC

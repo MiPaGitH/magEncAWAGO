@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="D">
+  <design>
+    <source>D:\Patras\Proiecte\uSBWheel\Electric\magneticEncoderTest\magneticEncTest.sch</source>
+    <date>9/23/2015 11:55:39 AM</date>
+    <tool>Eeschema (2015-09-10 BZR 6177, Git 24409c6)-product</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>magneticEncTest.sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="U1">
+      <value>AEAT-6600-T16</value>
+      <footprint>Housings_SSOP:TSSOP-16_4.4x5mm_Pitch0.65mm</footprint>
+      <libsource lib="aeat-6600" part="AEAT-6600-T16"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55F942BC</tstamp>
+    </comp>
+    <comp ref="C2">
+      <value>10uF</value>
+      <footprint>Capacitors_SMD:C_1210_HandSoldering</footprint>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55F943D0</tstamp>
+    </comp>
+    <comp ref="C1">
+      <value>100nF</value>
+      <footprint>Capacitors_SMD:C_1206_HandSoldering</footprint>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55FBDACE</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>47K</value>
+      <footprint>Resistors_SMD:R_1206_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55FBE1A0</tstamp>
+    </comp>
+    <comp ref="C3">
+      <value>100nF</value>
+      <footprint>Capacitors_SMD:C_1206_HandSoldering</footprint>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55FBE476</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>47K</value>
+      <footprint>Resistors_SMD:R_1206_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>55FBE671</tstamp>
+    </comp>
+    <comp ref="P1">
+      <value>cMAG_Hi/Lo</value>
+      <footprint>conSMD:conSMD_X2</footprint>
+      <libsource lib="conn" part="CONN_01X02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>56014FC1</tstamp>
+    </comp>
+    <comp ref="R1">
+      <value>47K</value>
+      <footprint>Resistors_SMD:R_1206_HandSoldering</footprint>
+      <libsource lib="device" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>560164D9</tstamp>
+    </comp>
+    <comp ref="P5">
+      <value>cStepUpConverter</value>
+      <footprint>conSMD:conSMD_x4</footprint>
+      <libsource lib="conn" part="CONN_01X04"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5601A885</tstamp>
+    </comp>
+    <comp ref="P3">
+      <value>cSSI</value>
+      <footprint>conSMD:conSMD_x4</footprint>
+      <libsource lib="conn" part="CONN_01X04"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5601B1C4</tstamp>
+    </comp>
+    <comp ref="P4">
+      <value>cPwr5VDC</value>
+      <footprint>conSMD:conSMD_X2</footprint>
+      <libsource lib="conn" part="CONN_01X02"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5601B70E</tstamp>
+    </comp>
+    <comp ref="P2">
+      <value>cAlignProgPwrDwn</value>
+      <footprint>conSMD:conSMD_x4</footprint>
+      <libsource lib="conn" part="CONN_01X04"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>56025788</tstamp>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="device" part="C">
+      <description>Unpolarized capacitor</description>
+      <footprints>
+        <fp>C?</fp>
+        <fp>C_????_*</fp>
+        <fp>C_????</fp>
+        <fp>SMD*_c</fp>
+        <fp>Capacitor*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="device" part="R">
+      <description>Resistor</description>
+      <footprints>
+        <fp>R_*</fp>
+        <fp>Resistor_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+      </fields>
+      <pins>
+        <pin num="1" name="~" type="passive"/>
+        <pin num="2" name="~" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X02">
+      <footprints>
+        <fp>Pin_Header_Straight_1X02</fp>
+        <fp>Pin_Header_Angled_1X02</fp>
+        <fp>Socket_Strip_Straight_1X02</fp>
+        <fp>Socket_Strip_Angled_1X02</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X02</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="conn" part="CONN_01X04">
+      <footprints>
+        <fp>Pin_Header_Straight_1X04</fp>
+        <fp>Pin_Header_Angled_1X04</fp>
+        <fp>Socket_Strip_Straight_1X04</fp>
+        <fp>Socket_Strip_Angled_1X04</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">P</field>
+        <field name="Value">CONN_01X04</field>
+      </fields>
+      <pins>
+        <pin num="1" name="P1" type="passive"/>
+        <pin num="2" name="P2" type="passive"/>
+        <pin num="3" name="P3" type="passive"/>
+        <pin num="4" name="P4" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="aeat-6600" part="AEAT-6600-T16">
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">AEAT-6600-T16</field>
+      </fields>
+      <pins>
+        <pin num="1" name="A/U" type="output"/>
+        <pin num="2" name="B/V" type="output"/>
+        <pin num="3" name="I/W" type="output"/>
+        <pin num="4" name="MAG_HI/OTP_ERR" type="output"/>
+        <pin num="5" name="MAG_LO/OTP_PROG_STAT" type="output"/>
+        <pin num="6" name="GND" type="power_in"/>
+        <pin num="7" name="ALIGN" type="input"/>
+        <pin num="8" name="PWM" type="output"/>
+        <pin num="9" name="VDD" type="power_in"/>
+        <pin num="10" name="VDD_F" type="power_in"/>
+        <pin num="11" name="PWRDOWN" type="input"/>
+        <pin num="12" name="VPP" type="power_in"/>
+        <pin num="13" name="PROG" type="input"/>
+        <pin num="14" name="NCS" type="input"/>
+        <pin num="15" name="CLK" type="input"/>
+        <pin num="16" name="DO/DI" type="3state"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="device">
+      <uri>D:\Programe\KiCad\share\kicad\library\device.lib</uri>
+    </library>
+    <library logical="conn">
+      <uri>D:\Programe\KiCad\share\kicad\library\conn.lib</uri>
+    </library>
+    <library logical="aeat-6600">
+      <uri>D:\Patras\Proiecte\uSBWheel\Electric\customKicadLibs\aeat-6600.lib</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="+3V3">
+      <node ref="C1" pin="2"/>
+      <node ref="U1" pin="9"/>
+      <node ref="U1" pin="10"/>
+      <node ref="C2" pin="2"/>
+      <node ref="P4" pin="1"/>
+      <node ref="P5" pin="1"/>
+    </net>
+    <net code="2" name="GND">
+      <node ref="P3" pin="4"/>
+      <node ref="C1" pin="1"/>
+      <node ref="P5" pin="2"/>
+      <node ref="P4" pin="2"/>
+      <node ref="C3" pin="2"/>
+      <node ref="R3" pin="2"/>
+      <node ref="R2" pin="1"/>
+      <node ref="C2" pin="1"/>
+      <node ref="U1" pin="6"/>
+      <node ref="R1" pin="1"/>
+      <node ref="P2" pin="4"/>
+      <node ref="P5" pin="3"/>
+    </net>
+    <net code="3" name="/MAG_HI">
+      <node ref="P1" pin="2"/>
+      <node ref="U1" pin="4"/>
+    </net>
+    <net code="4" name="/MAG_LO">
+      <node ref="P1" pin="1"/>
+      <node ref="U1" pin="5"/>
+    </net>
+    <net code="5" name="/DI/DO">
+      <node ref="P3" pin="3"/>
+      <node ref="U1" pin="16"/>
+    </net>
+    <net code="6" name="/CLK">
+      <node ref="P3" pin="2"/>
+      <node ref="U1" pin="15"/>
+    </net>
+    <net code="7" name="/NCS">
+      <node ref="P3" pin="1"/>
+      <node ref="U1" pin="14"/>
+    </net>
+    <net code="8" name="/PROG">
+      <node ref="U1" pin="13"/>
+      <node ref="P2" pin="2"/>
+      <node ref="R2" pin="2"/>
+    </net>
+    <net code="9" name="/PwrDwn">
+      <node ref="U1" pin="11"/>
+      <node ref="P2" pin="3"/>
+      <node ref="R3" pin="1"/>
+    </net>
+    <net code="10" name="Net-(U1-Pad2)">
+      <node ref="U1" pin="2"/>
+    </net>
+    <net code="11" name="Net-(U1-Pad3)">
+      <node ref="U1" pin="3"/>
+    </net>
+    <net code="12" name="/ALIGN">
+      <node ref="R1" pin="2"/>
+      <node ref="P2" pin="1"/>
+      <node ref="U1" pin="7"/>
+    </net>
+    <net code="13" name="Net-(U1-Pad8)">
+      <node ref="U1" pin="8"/>
+    </net>
+    <net code="14" name="Net-(U1-Pad1)">
+      <node ref="U1" pin="1"/>
+    </net>
+    <net code="15" name="/VPP=VDDor6.5VDC">
+      <node ref="C3" pin="1"/>
+      <node ref="U1" pin="12"/>
+      <node ref="P5" pin="4"/>
+    </net>
+  </nets>
+</export>
