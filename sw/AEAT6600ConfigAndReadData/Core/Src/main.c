@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "..\..\app\uart\u.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,15 +39,6 @@
 //Incremental enable (bit 11)
 #define OTPDATA_bits_15_0_ModeHI_and_LO (1u<<11) + (1u<<8) + 0x07u
 
-#define NB_OF_CLK_EDGES 71
-
-enum
-{
-	firstRead,
-	write,
-	secondRead,
-	maxState
-};
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -56,26 +47,14 @@ enum
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-SPI_HandleTypeDef hspi2;
-
 TIM_HandleTypeDef htim1;
 
+UART_HandleTypeDef huart3;
+DMA_HandleTypeDef hdma_usart3_rx;
+DMA_HandleTypeDef hdma_usart3_tx;
+
 /* USER CODE BEGIN PV */
-//values for activating the ABI interface
-uint8_t otpData[3][2][NB_OF_CLK_EDGES+2] =
- {
-  /*read*/
-  {/*CLK*/ {1,0, /*RD/WR*/1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, /*par*/1, 0, 1, 1, 1 },
-   /*DO*/  {1,1,          0,0, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,        1, 1, 1, 0, 0 }},
 
-   /*write*/
-  {/*CLK*/ {1,0, /*RD/WR*/1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, /*par*/1, 0, 1, 1, 1 },
-   /*DO*/  {1,1,          1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,1,0,0,0,0,1,1, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,1,1,        1, 1, 0, 0, 0 }},
-
-   /*second read*/
-  {/*CLK*/ {1,0, /*RD/WR*/1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, /*par*/1, 0, 1, 1, 1 },
-   /*DO*/  {1,1,          0,0, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,        1, 1, 1, 0, 0 }},
- };
 uint32_t inputData;
 uint32_t inputDataFirstRead;
 uint32_t inputDataSecondRead;
@@ -88,7 +67,6 @@ uint32_t cntClkRisingEdge;
 uint8_t mData[2];
 uint16_t mData16;
 
-uint32_t tim1Tick;
 uint32_t mSysTick;
 uint32_t oldTick;
 uint32_t oldBtn;
@@ -99,7 +77,6 @@ uint8_t clkPinState;
 uint8_t pState;
 uint8_t oldpState;
 
-uint8_t globState;
 uint8_t doInputMode;
 
 uint8_t inputParBit;
@@ -110,19 +87,17 @@ uint8_t evTim1Tick;
 uint8_t pStBuf[255];
 uint8_t cPStateBuf;
 
-uint8_t *cOtpClk;
-uint8_t *cOtpData;
-
-
 volatile uint8_t btnPressed;
+
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_TIM1_Init(void);
-static void MX_SPI2_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -140,8 +115,6 @@ int main(void)
 {
   /* USER CODE BEGIN 1 */
 //	GPIO_InitTypeDef GPIO_InitStruct = {0};
-	cOtpClk = &otpData[0][0][0];
-	cOtpData = &otpData[0][1][0];
 
 //	uint8_t fSetPin2InputMode = 0u;
 	oldTick = 0u;
@@ -156,7 +129,6 @@ int main(void)
 
 	pState = 0u;
 	oldpState = 0u;
-	globState = firstRead;
 
 	cPStateBuf = 0u;
 
@@ -170,6 +142,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
+  uInit();
 
   /* USER CODE END Init */
 
@@ -182,46 +155,26 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_TIM1_Init();
-  MX_SPI2_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
   HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin|ssiClk_Pin|ssiDO_Pin, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin, GPIO_PIN_RESET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  uint8_t nBtn = GPIO_PIN_RESET;
-	  nBtn = HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin);
+//	  uint8_t nBtn = GPIO_PIN_RESET;
+//	  nBtn = HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin);
 	  mSysTick = HAL_GetTick();
 	  if ( (oldTick!=mSysTick) && (0u == (mSysTick%25)) )
 	  {
-		  mData16 = ((((uint16_t)mData[1]&0x3F)<<8) + mData[0])>>4;
-		  //HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin, GPIO_PIN_SET);
+//		  mData16 = ((((uint16_t)mData[1]&0x3F)<<8) + mData[0])>>4;
+//		  HAL_GPIO_TogglePin(GPIOA, ssiNCS_Pin);
+		  uTask();
 		  oldTick = mSysTick;
-		  //start data transfer
-		  HAL_SPI_Receive(&hspi2, &mData[0], 1u, 1000u);
-	  }
-
-
-	  if ( ( GPIO_PIN_RESET == oldBtn) && (GPIO_PIN_SET== nBtn ) )
-	  {
-		  oldBtn = 100000u;
-		  if ( globState < maxState )
-		  {
-			  cOtpClk = &otpData[globState][0][0];
-			  cOtpData = &otpData[globState][1][0];
-
-			  globState++;
-			  HAL_TIM_Base_Start_IT(&htim1);
-		  }
-
-	  }
-	  if ( GPIO_PIN_RESET == nBtn ) //deBounce
-	  {
-		  if ( oldBtn>0u) oldBtn--;
 	  }
 
     /* USER CODE END WHILE */
@@ -269,52 +222,13 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_TIM1;
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_TIM1;
+  PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
   PeriphClkInit.Tim1ClockSelection = RCC_TIM1CLK_HCLK;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }
-}
-
-/**
-  * @brief SPI2 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_SPI2_Init(void)
-{
-
-  /* USER CODE BEGIN SPI2_Init 0 */
-
-  /* USER CODE END SPI2_Init 0 */
-
-  /* USER CODE BEGIN SPI2_Init 1 */
-
-  /* USER CODE END SPI2_Init 1 */
-  /* SPI2 parameter configuration*/
-  hspi2.Instance = SPI2;
-  hspi2.Init.Mode = SPI_MODE_MASTER;
-  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi2.Init.DataSize = SPI_DATASIZE_16BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
-  hspi2.Init.NSS = SPI_NSS_HARD_OUTPUT;
-  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_256;
-  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi2.Init.CRCPolynomial = 7;
-  hspi2.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
-  hspi2.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
-  if (HAL_SPI_Init(&hspi2) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN SPI2_Init 2 */
-
-  /* USER CODE END SPI2_Init 2 */
-
 }
 
 /**
@@ -361,6 +275,60 @@ static void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
+  * @brief USART3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART3_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART3_Init 0 */
+
+  /* USER CODE END USART3_Init 0 */
+
+  /* USER CODE BEGIN USART3_Init 1 */
+
+  /* USER CODE END USART3_Init 1 */
+  huart3.Instance = USART3;
+  huart3.Init.BaudRate = 115200;
+  huart3.Init.WordLength = UART_WORDLENGTH_8B;
+  huart3.Init.StopBits = UART_STOPBITS_1;
+  huart3.Init.Parity = UART_PARITY_NONE;
+  huart3.Init.Mode = UART_MODE_TX_RX;
+  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart3.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart3.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART3_Init 2 */
+
+  /* USER CODE END USART3_Init 2 */
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+  /* DMA1_Channel3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
 
 }
 
@@ -433,14 +401,6 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(testPin_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : STLK_RX_Pin STLK_TX_Pin */
-  GPIO_InitStruct.Pin = STLK_RX_Pin|STLK_TX_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
   /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
   GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -466,29 +426,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-	HAL_GPIO_TogglePin(testPin_GPIO_Port, testPin_Pin);
-//	if ( pState != 0u )
-//	{
-	  HAL_GPIO_WritePin(GPIOA, ssiClk_Pin, cOtpClk[tim1Tick]);
-	  HAL_GPIO_WritePin(GPIOA, ssiDO_Pin, cOtpData[tim1Tick]);
-	  HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, dataPinState);
-//	}
-
-	if (tim1Tick< NB_OF_CLK_EDGES)
-	{
-		tim1Tick++;
-	}
-	else
-	{
-		tim1Tick=0u;
-		HAL_TIM_Base_Stop_IT(&htim1);
-//		HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin, GPIO_PIN_SET);
-	}
-//	evTim1Tick = 1u;
-}
-
 
 
 /* USER CODE END 4 */
