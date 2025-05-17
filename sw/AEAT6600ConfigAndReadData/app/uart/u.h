@@ -7,6 +7,12 @@ enum
 	write
 };
 
+enum
+{
+	clk,
+	dat
+};
+
 extern void uInit( void );
 extern void uTask( void );
 

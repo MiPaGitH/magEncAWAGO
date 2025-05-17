@@ -4,4 +4,4 @@ main.c:239:13:MX_TIM1_Init	4
 main.c:286:13:MX_USART3_UART_Init	2
 main.c:319:13:MX_DMA_Init	1
 main.c:340:13:MX_GPIO_Init	1
-main.c:437:6:Error_Handler	1
+main.c:447:6:Error_Handler	1

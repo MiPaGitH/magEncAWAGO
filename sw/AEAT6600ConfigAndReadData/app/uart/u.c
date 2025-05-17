@@ -2,14 +2,19 @@
 #include "main.h"
 
 
-static void setConditionsFor(uint8_t modeOtpOrReadEnc);
+static void setConditionsFor(uint8_t reqAction);
 static void getEncVal( void );
 static void setOTPField( void );
 static void getOTPVal( void );
 static void programOTPData( void);
 
+#define NB_OF_OTP_RDWR_BITS 1
+#define NB_OF_OTP_DATA_BITS 32
+#define NB_OF_OTP_PAR_BITS	1
+#define NB_OF_OTP_BITS	(NB_OF_OTP_RDWR_BITS + NB_OF_OTP_DATA_BITS + NB_OF_OTP_PAR_BITS)
 
-#define NB_OF_CLK_EDGES 71
+
+#define NB_OF_CLK_EDGES (2/*1 then 0 first falling edge*/ + (2*NB_OF_OTP_BITS) + 2/*HIGH bits at the end*/)
 #define NB_OF_OTP_ELEMS 12
 
 
@@ -43,6 +48,8 @@ extern TIM_HandleTypeDef htim1;
 static uint8_t uartRxBuf[10];
 static uint8_t encResolution[]={10u,12u,14u,16u};
 static uint8_t menuSize;
+static uint8_t mErrOk[]="command executed successfully";
+static uint8_t mErrNOk[]="invalid command";
 static uint8_t mPrompt[]="cmd:";
 static uint8_t uartMenu[1024];
 static uint8_t uState;
@@ -53,75 +60,108 @@ static uint8_t *cOtpClk;
 static uint8_t *cOtpData;
 static uint8_t ssiClkEdgesNb;
 static uint8_t fUARTRx;
+static uint8_t fUARTTx;
 static uint8_t fWaitSSITransfer;
 static uint8_t fParseSSIRxData;
+static uint8_t fInvalidCommand;
 
 static uint16_t encVal;
 
 static uint32_t tim1Tick;
 static uint32_t cntWaitOTPWriteStatusFlags;
 
-//values for activating the ABI interface
-static uint8_t otpData[2][2][NB_OF_CLK_EDGES+2] =
- {
+static uint8_t encData[2][35]=
+{
+  /*CLK*/ {1,0, /*data*/1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1},
+  /*DI*/  {1,1, /*data*/1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1},
+};
+
+static uint8_t otpData[2][2][NB_OF_CLK_EDGES] =
+{
   /*read*/
-  {/*CLK*/ {1,0, /*RD/WR*/1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, /*par*/1, 0, 1, 1, 1 },
-   /*DO*/  {1,1,          0,0, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,        1, 1, 1, 0, 0 }},
+  {/*CLK*/ {1,0, /*RD/WR*/1,0, /*data*/1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, /*par*/1, 0, 1, 1 },
+   /*DO*/  {1,1,          0,0, /*data*/1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1, 1,1,1,1,1,1,1,1,        1, 1, 1, 0 }},
    /*write*/
-  {/*CLK*/ {1,0, /*RD/WR*/1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, /*par*/1, 0, 1, 1, 1 },
-   /*DO*/  {1,1,          1,1, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,1,0,0,0,0,1,1, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,1,1,        1, 1, 0, 0, 0 }},
+  {/*CLK*/ {1,0, /*RD/WR*/1,0, /*data*/1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, 1,0,1,0,1,0,1,0, /*par*/1, 0, 1, 1 },
+   /*DI*/  {1,1,          1,1, /*data*/0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,1,0,0,0,0,1,1, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,1,1,        1, 1, 0, 0 }},
+};
+static uint16_t OTPDataRanges[]={7,0,0,3,0,0,0,1,3,0,1,1,1,1,1,1,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
-
- };
-
-static uint8_t OTPData[32]={0,}; //default values: all bits 0
-static uint8_t OTPDataBitPos[NB_OF_OTP_ELEMS]={0,3,5,7,8,10,11,12,13,14,15,16};
-static uint8_t menuOTPDescr[]=
-"0 1 2  3 4   56  7  8 9   10 11 12 13 14 15  16          ..                31  \r\n\
-0 0 0  0 0   ..  0  0 0   0  0  0  0  0  0   0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0	\r\n\
-|      |     |   |  |     |  |  |  |  |  |   | 									\r\n\
-|      |     |   |  |     |  |  |  |  |  |   [16..31] Zero.Position = 0			\r\n\
-|      |     |   |  |     |  |  |  |  |  [15] Mode_HI.DIR = 0					\r\n\
-|      |     |   |  |     |  |  |  |  [14] Mode_HI.SpeedMode = 0				\r\n\
-|      |     |   |  |     |  |  |  [13] Mode_HI.PWM Enable = 0					\r\n\
-|      |     |   |  |     |  |  [12] Mode_HI.PWMPeriodSel = 0					\r\n\
-|      |     |   |  |     |  [11] Mode_HI.IncrementalEn = 0						\r\n\
-|      |     |   |  |     [10] Mode_HI.IncrementalSelect = 0  					\r\n\
-|      |     |   |  [8,9] Mode_HI.AbsoluteResolution = 0						\r\n\
-|      |     |   [7] modeLo.IndexOutputLevel = 0								\r\n\
-|      |     [5,6] modeLo.unused bits = 0										\r\n\
-|      [3,4] modeLo.IndexPulseWidth = 0											\r\n\
-[0..2] modeLo.IncResolution = 0													\r\n";
+//static uint8_t OTPDataBitPos[NB_OF_OTP_ELEMS]={0,3,5,7,8,10,11,12,13,14,15,16};
+static uint8_t menuOTPDescrHeader[]=
+"0 1 2  3 4  5 6  7  8 9  10 11 12 13 14 15 16          ..                31  \r\n\
+actual \r\n";
+static uint8_t menuOTPDescrActualData[]=
+"0 0 0  0 0  . .  0  1 1  0  0  0  0  0  0  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0	\r\n\
+desired \r\n";
+static uint8_t menuOTPDescrDesiredData[]=
+"0 0 0  0 0  . .  0  0 0  0  0  0  0  0  0  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0	\r\n\
+|      |    |    |  |    |  |  |  |  |  |  | 								\r\n\
+|      |    |    |  |    |  |  |  |  |  |  [16..31] Zero.Position = 0		\r\n\
+|      |    |    |  |    |  |  |  |  |  [15] Mode_HI.DIR = 0				\r\n\
+|      |    |    |  |    |  |  |  |  [14] Mode_HI.SpeedMode = 0				\r\n\
+|      |    |    |  |    |  |  |  [13] Mode_HI.PWM Enable = 0				\r\n\
+|      |    |    |  |    |  |  [12] Mode_HI.PWMPeriodSel = 0				\r\n\
+|      |    |    |  |    |  [11] Mode_HI.IncrementalEn = 0					\r\n\
+|      |    |    |  |    [10] Mode_HI.IncrementalSelect = 0  				\r\n\
+|      |    |    |  [8,9] Mode_HI.AbsoluteResolution = 0					\r\n\
+|      |    |    [7] modeLo.IndexOutputLevel = 0							\r\n\
+|      |    [5,6] modeLo.unused bits = 0									\r\n\
+|      [3,4] modeLo.IndexPulseWidth = 0										\r\n\
+[0..2] modeLo.IncResolution = 0												\r\n";
 
 // Define menu items
 static MenuItem menu[] = {
-    {"ge", "g - get encoder value", getEncVal},
-	{"go", "o - get current OTP data", getOTPVal},
-    {"so,", "s,<pos>,<0xval> - set OTP field; replace <pos> with the field bit position and <0xval> with the desired field value in hex", setOTPField},
-    {"po", "p - program the OTP data", programOTPData}
+    {"ge", "ge - get encoder value", getEncVal},
+	{"go", "go - get current OTP data", getOTPVal},
+    {"so,","so,<pos>,<0xval> - set OTP field; replace <pos> with the field bit position and <0xval> with the desired field value in hex", setOTPField},
+    {"po", "po - program the OTP data", programOTPData}
 };
 
-static void setConditionsFor(uint8_t modeOtpOrReadEnc)
-{
-	if ( eProgOTP == modeOtpOrReadEnc )
+uint32_t myAtoUi(const uint8_t *str) {
+    uint32_t i = 0u;
+    uint32_t result = 0u;
+
+    // Convert characters to integer
+    while (str[i] >= '0' && str[i] <= '9') {
+        int digit = str[i] - '0';
+
+        result = result * 10 + digit;
+        i++;
+    }
+
+    if (str[i] != '\0' )
+    {
+    	fInvalidCommand = 1u;
+    	result = 0xFFFFFFFFu;
+    }
+
+    return result;
+}
+
+static void setConditionsFor(uint8_t reqAction)
+{//Note: make sure ALIGN and PWRDOWN are set to Low
+	if ( eProgOTP == reqAction )
 	{
-		//TODO - enable 6.5V output to VPP pin; ALIGN, PWRDOWN – Set Low, PROG – Set High
+		HAL_GPIO_WritePin(pPROG_GPIO_Port, pPROG_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(pVPP_GPIO_Port, pVPP_Pin, GPIO_PIN_SET);
 	}
 	else
 	{
-		//TODO - disable 6.5V output to VPP pin; ALIGN, PWRDOWN – Set Low, PROG – Set Low
+		HAL_GPIO_WritePin(pPROG_GPIO_Port, pPROG_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(pVPP_GPIO_Port, pVPP_Pin, GPIO_PIN_RESET);
 	}
 }
 
 static void getEncVal( void )
 {
-	uint8_t encResolutionOTPVal = (OTPData[9]<<1) + OTPData[8]; //bits 9 and 8 contain the resolution configuration
+	uint8_t encResolutionOTPVal = (otpData[read][dat][4+8*2]<<1) + otpData[read][dat][4+9*2]; //bits 9 and 8 contain the resolution configuration
 	setConditionsFor(eReadEncVal);
 	ssiMode = read;
 
-	cOtpClk = &otpData[ssiMode][0][0];
-	cOtpData = &otpData[ssiMode][1][0];
-	ssiClkEdgesNb = encResolution[encResolutionOTPVal]*2u;
+	cOtpClk = &encData[clk][0];
+	cOtpData = &encData[dat][0];
+	ssiClkEdgesNb = 2u/*first falling edge*/ + encResolution[encResolutionOTPVal]*2u + 1u/*rising edge at the end*/;
 
 	fWaitSSITransfer  = 1u;
 	fParseSSIRxData = 1u;
@@ -136,8 +176,8 @@ static void getOTPVal( void )
 	setConditionsFor(eReadEncVal);
 	ssiMode = read;
 
-	cOtpClk = &otpData[ssiMode][0][0];
-	cOtpData = &otpData[ssiMode][1][0];
+	cOtpClk = &otpData[read][clk][0];
+	cOtpData = &otpData[read][dat][0];
 	ssiClkEdgesNb = NB_OF_CLK_EDGES;
 
 	fWaitSSITransfer  = 1u;
@@ -148,8 +188,49 @@ static void getOTPVal( void )
 
 static void setOTPField( void )
 {
-	//TODO - check the value passed after option name: so and update the otpData[1] buffer and menuOTPDescr with the values
+	uint8_t lIdx = 0u;
+	uint8_t lBitPosVal = 0u;
+	uint32_t lOTPval = 0u;
+	uint8_t lOTPvalBits[16] = {0,};
 
+	//read bit number (max 2 digits)
+	lIdx = 3u;
+	while ( (lIdx < 7u) && (uartRxBuf[lIdx] != ',') )
+	{
+		lBitPosVal = lBitPosVal << 1;
+		lBitPosVal += uartRxBuf[2+lIdx];
+		lIdx++;
+	}
+	if ( lIdx <= 5u )
+	{//bit number was OK (max 2 digits)
+		if ( lBitPosVal < 16u )
+		{//bit position value is valid
+			//convert value from hex string to INT
+			lOTPval = myAtoUi(&uartRxBuf[lIdx]);
+			if ( 0u == fInvalidCommand )
+			{//Conversion successful
+				if ( OTPDataRanges[lBitPosVal] >= lOTPval )
+				{//value is in range
+					//update the otpData buffer used for writing
+					lIdx = 0u;
+					while (0u != lOTPval)
+					{
+						lIdx++;
+						lOTPvalBits[lIdx-1] = lOTPval % 2;
+						lOTPval >>= 1;
+					}
+					while (lIdx--)
+					{
+						otpData[write][dat][4+2*lBitPosVal+lIdx] = lOTPvalBits[lIdx-1];
+					}
+				}
+			}else{/*error flag already set: nothing more to do here*/}
+		}
+		else
+		{
+			fInvalidCommand = 1u;
+		}
+	}
 }
 
 static void programOTPData( void)
@@ -157,8 +238,8 @@ static void programOTPData( void)
 	setConditionsFor(eProgOTP);
 	ssiMode = write;
 
-	cOtpClk = &otpData[ssiMode][0][0];
-	cOtpData = &otpData[ssiMode][1][0];
+	cOtpClk = &otpData[write][clk][0];
+	cOtpData = &otpData[write][dat][0];
 	ssiClkEdgesNb = NB_OF_CLK_EDGES;
 
 	fWaitSSITransfer  = 1u;
@@ -196,13 +277,29 @@ static uint16_t prepareMenu( void ) {
 	uartMenu[lIdxuMenu++] = '\r';
 	uartMenu[lIdxuMenu++] = '\n';
 
-	//TODO update actual OTP data according to the received data from device via SSI interface
-	//TODO update the preset OTP data according to the values set via UART interface
+	//update actual OTP data according to the received data from device via SSI interface
+	for ( lIdx = 0u; lIdx < 32u; lIdx++)
+	{
+		menuOTPDescrActualData[lIdx+85]= otpData[read][dat][4+lIdx*2];
+	}
+	//update desired OTP data according to the received data from device via SSI interface
+	for ( lIdx = 0u; lIdx < 32u; lIdx++)
+	{
+		menuOTPDescrDesiredData[lIdx+85]= otpData[write][dat][4+lIdx*2];
+	}
 
 	//copy OTP description
-	for (/*lIdx already initialized above*/;lIdxuMenu<sizeof(menuOTPDescr); lIdxuMenu++)
+	for (/*lIdx already initialized above*/;lIdxuMenu<sizeof(menuOTPDescrHeader); lIdxuMenu++)
 	{
-		uartMenu[lIdxuMenu] = menuOTPDescr[lIdxuMenu];
+		uartMenu[lIdxuMenu] = menuOTPDescrHeader[lIdxuMenu];
+	}
+	for (/*lIdx already initialized above*/;lIdxuMenu<sizeof(menuOTPDescrActualData); lIdxuMenu++)
+	{
+		uartMenu[lIdxuMenu] = menuOTPDescrActualData[lIdxuMenu];
+	}
+	for (/*lIdx already initialized above*/;lIdxuMenu<sizeof(menuOTPDescrDesiredData); lIdxuMenu++)
+	{
+		uartMenu[lIdxuMenu] = menuOTPDescrDesiredData[lIdxuMenu];
 	}
 
 	//copy Menu items
@@ -210,6 +307,23 @@ static uint16_t prepareMenu( void ) {
     	for (lIdx = 0u; lIdx<sizeof(menu[lMenuItem].helpText); lIdx++)
     	{
     		uartMenu[lIdxuMenu] = menu[lMenuItem].helpText[lIdx];
+    		lIdxuMenu++;
+    	}
+    }
+    if ( 0u != fInvalidCommand )
+    {//command NOK
+    	fInvalidCommand = 0u;
+    	for (lIdx=0u; lIdx<sizeof(mErrNOk); lIdx++)
+    	{
+    		uartMenu[lIdxuMenu] = mErrNOk[lIdx];
+    		lIdxuMenu++;
+    	}
+    }
+    else
+    {//command OK
+    	for (lIdx=0u; lIdx<sizeof(mErrOk); lIdx++)
+    	{
+    		uartMenu[lIdxuMenu] = mErrOk[lIdx];
     		lIdxuMenu++;
     	}
     }
@@ -229,7 +343,7 @@ static void processChoice(uint8_t choice[]) {
 	uint8_t lMenuItem = 0u;
 	uint8_t lFound = 0u;
 
-	for (/*lMenuItem initialized above*/;lMenuItem<  menuSize; lMenuItem++)
+	for (/*lMenuItem initialized above*/; lMenuItem<menuSize; lMenuItem++)
 	{
 		lFound = 1u;
 		for (lIdx = 0u; lIdx<sizeof(menu[lMenuItem].optionName); lIdx++)
@@ -276,8 +390,10 @@ void uInit( void )
 	fUARTRx = 0u;
 	cntWaitOTPWriteStatusFlags = 0u;
 
-	cOtpClk = &otpData[0][0][0];
-	cOtpData = &otpData[0][1][0];
+	fInvalidCommand = 0u;
+
+	cOtpClk = &otpData[read][clk][0];
+	cOtpData = &otpData[read][dat][0];
 }
 
 void uTask( void ) {
@@ -323,7 +439,11 @@ void uTask( void ) {
 		uState=eWaitTxEnd;
 		break;
 	case eWaitTxEnd:
-		//TODO if ( )
+		if ( 0u != fUARTTx )
+		{
+			fUARTTx = 0u;
+			uState=eInit;
+		}
 		break;
 	default:
 		uState = eInit;
@@ -378,5 +498,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	if ( USART3 == huart->Instance)
 	{
 		fUARTRx = 1u;
+	}
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if ( USART3 == huart->Instance)
+	{
+		fUARTTx = 1u;
 	}
 }
