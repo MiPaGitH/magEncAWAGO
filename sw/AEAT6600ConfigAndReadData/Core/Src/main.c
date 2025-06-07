@@ -50,8 +50,8 @@
 TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart3;
-DMA_HandleTypeDef hdma_usart3_rx;
 DMA_HandleTypeDef hdma_usart3_tx;
+DMA_HandleTypeDef hdma_usart3_rx;
 
 /* USER CODE BEGIN PV */
 
@@ -134,6 +134,7 @@ int main(void)
 
 	mData[0]=0u;
 	mData[1]=0u;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/

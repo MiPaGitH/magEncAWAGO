@@ -44,13 +44,15 @@ typedef enum
 extern UART_HandleTypeDef huart3;
 extern TIM_HandleTypeDef htim1;
 
+uint8_t iCnt;
+
 
 static uint8_t uartRxBuf[10];
 static uint8_t encResolution[]={10u,12u,14u,16u};
 static uint8_t menuSize;
-static uint8_t mErrOk[]="command executed successfully";
-static uint8_t mErrNOk[]="invalid command";
-static uint8_t mPrompt[]="cmd:";
+static uint8_t mErrOk[]="\r\ncommand executed successfully";
+static uint8_t mErrNOk[]="\r\ninvalid command";
+static uint8_t mPrompt[]="\r\ncmd:";
 static uint8_t uartMenu[1024];
 static uint8_t uState;
 static uint8_t fLedMagHiToggled;
@@ -343,6 +345,9 @@ static void processChoice(uint8_t choice[]) {
 	uint8_t lMenuItem = 0u;
 	uint8_t lFound = 0u;
 
+
+	//TODO MiPa aici - debug this code; the commands are not compared correctly
+
 	for (/*lMenuItem initialized above*/; lMenuItem<menuSize; lMenuItem++)
 	{
 		lFound = 1u;
@@ -394,6 +399,8 @@ void uInit( void )
 
 	cOtpClk = &otpData[read][clk][0];
 	cOtpData = &otpData[read][dat][0];
+
+	iCnt = 0u;
 }
 
 void uTask( void ) {
@@ -402,8 +409,11 @@ void uTask( void ) {
 	switch (uState)
 	{
 	case eInit:
-		HAL_UART_Receive_DMA(&huart3, uartRxBuf, sizeof(uartRxBuf));
-		uState=eWaitRx;
+		if ( iCnt > 20u )
+		{
+			uState = eWaitChoiceActions; //in this state the menu will be sent over UART to the PC terminal application
+		}
+		else iCnt++;
 
 		break;
 	case eWaitRx:
@@ -442,7 +452,9 @@ void uTask( void ) {
 		if ( 0u != fUARTTx )
 		{
 			fUARTTx = 0u;
-			uState=eInit;
+
+			HAL_UARTEx_ReceiveToIdle_DMA(&huart3, uartRxBuf, sizeof(uartRxBuf));
+			uState=eWaitRx;
 		}
 		break;
 	default:
@@ -494,6 +506,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if ( USART3 == huart->Instance)
+	{
+		fUARTRx = 1u;
+	}
+}
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) //called when idle event happens after receiving a number of bytes less than SIZEOF(uartRxBuf) (the 3'RD parameter of HAL_UARTEx_ReceiveToIdle_DMA function
 {
 	if ( USART3 == huart->Instance)
 	{
