@@ -50,9 +50,9 @@ uint8_t iCnt;
 static uint8_t uartRxBuf[10];
 static uint8_t encResolution[]={10u,12u,14u,16u};
 static uint8_t menuSize;
-static uint8_t mErrOk[]="\r\ncommand executed successfully";
-static uint8_t mErrNOk[]="\r\ninvalid command";
-static uint8_t mPrompt[]="\r\ncmd:";
+static uint8_t mErrOk[]="command executed successfully\r\n";
+static uint8_t mErrNOk[]="invalid command\r\n";
+static uint8_t mPrompt[]="cmd:";
 static uint8_t uartMenu[1024];
 static uint8_t uState;
 static uint8_t fLedMagHiToggled;
@@ -88,6 +88,8 @@ static uint8_t otpData[2][2][NB_OF_CLK_EDGES] =
    /*DI*/  {1,1,          1,1, /*data*/0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,1,0,0,0,0,1,1, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,1,1,        1, 1, 0, 0 }},
 };
 static uint16_t OTPDataRanges[]={7,0,0,3,0,0,0,1,3,0,1,1,1,1,1,1,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+static uint16_t OTPDataElementsFormating[]={2,2,3,2,3,2,3,3,2,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0};
+
 
 //static uint8_t OTPDataBitPos[NB_OF_OTP_ELEMS]={0,3,5,7,8,10,11,12,13,14,15,16};
 static uint8_t menuOTPDescrHeader[]=
@@ -254,8 +256,9 @@ static void programOTPData( void)
 static uint16_t prepareMenu( void ) {
 	uint16_t lIdx = 0u;
 	uint16_t lIdxuMenu = 0u;
+	uint16_t lIdxOtpMenu = 0u;
 	uint8_t lMenuItem = 0u;
-	uint8_t encValDescr[] = "Encoder value: ";
+	uint8_t encValDescr[] = "\r\nEncoder value: ";
 	uint8_t encValTextRev[] = "65535";
 	uint16_t lencVal = encVal;
 
@@ -282,26 +285,32 @@ static uint16_t prepareMenu( void ) {
 	//update actual OTP data according to the received data from device via SSI interface
 	for ( lIdx = 0u; lIdx < 32u; lIdx++)
 	{
-		menuOTPDescrActualData[lIdx+85]= otpData[read][dat][4+lIdx*2];
+		menuOTPDescrActualData[lIdxOtpMenu]= '0' + otpData[read][dat][4+lIdx*2];
+		lIdxOtpMenu += OTPDataElementsFormating[lIdx];
 	}
+	lIdxOtpMenu=0u;
 	//update desired OTP data according to the received data from device via SSI interface
 	for ( lIdx = 0u; lIdx < 32u; lIdx++)
 	{
-		menuOTPDescrDesiredData[lIdx+85]= otpData[write][dat][4+lIdx*2];
+		menuOTPDescrDesiredData[lIdxOtpMenu]= '0' + otpData[write][dat][4+lIdx*2];
+		lIdxOtpMenu += OTPDataElementsFormating[lIdx];
 	}
 
 	//copy OTP description
-	for (/*lIdx already initialized above*/;lIdxuMenu<sizeof(menuOTPDescrHeader); lIdxuMenu++)
+	for (lIdx = 0u; lIdx < sizeof(menuOTPDescrHeader); lIdx++)
 	{
-		uartMenu[lIdxuMenu] = menuOTPDescrHeader[lIdxuMenu];
+		uartMenu[lIdxuMenu] = menuOTPDescrHeader[lIdx];
+		lIdxuMenu++;
 	}
-	for (/*lIdx already initialized above*/;lIdxuMenu<sizeof(menuOTPDescrActualData); lIdxuMenu++)
+	for (lIdx = 0u; lIdx < sizeof(menuOTPDescrActualData); lIdx++)
 	{
-		uartMenu[lIdxuMenu] = menuOTPDescrActualData[lIdxuMenu];
+		uartMenu[lIdxuMenu] = menuOTPDescrActualData[lIdx];
+		lIdxuMenu++;
 	}
-	for (/*lIdx already initialized above*/;lIdxuMenu<sizeof(menuOTPDescrDesiredData); lIdxuMenu++)
+	for (lIdx = 0u; lIdx < sizeof(menuOTPDescrDesiredData); lIdx++ )
 	{
-		uartMenu[lIdxuMenu] = menuOTPDescrDesiredData[lIdxuMenu];
+		uartMenu[lIdxuMenu] = menuOTPDescrDesiredData[lIdx];
+		lIdxuMenu++;
 	}
 
 	//copy Menu items

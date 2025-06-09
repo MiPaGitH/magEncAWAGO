@@ -3100,7 +3100,7 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
                 0x0000000008000000                g_pfnVectors
                 0x0000000008000194                . = ALIGN (0x4)
 
-.text           0x0000000008000194     0x5564
+.text           0x0000000008000194     0x55c0
                 0x0000000008000194                . = ALIGN (0x4)
  *(.text)
  .text          0x0000000008000194       0x40 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
@@ -3464,118 +3464,118 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .text.programOTPData
                 0x0000000008004f54       0x6c ./app/uart/u.o
  .text.prepareMenu
-                0x0000000008004fc0      0x298 ./app/uart/u.o
+                0x0000000008004fc0      0x2f4 ./app/uart/u.o
  .text.processChoice
-                0x0000000008005258       0x90 ./app/uart/u.o
+                0x00000000080052b4       0x90 ./app/uart/u.o
  .text.processSSIRxData
-                0x00000000080052e8       0x6c ./app/uart/u.o
- .text.uInit    0x0000000008005354       0x90 ./app/uart/u.o
-                0x0000000008005354                uInit
- .text.uTask    0x00000000080053e4      0x10c ./app/uart/u.o
-                0x00000000080053e4                uTask
+                0x0000000008005344       0x6c ./app/uart/u.o
+ .text.uInit    0x00000000080053b0       0x90 ./app/uart/u.o
+                0x00000000080053b0                uInit
+ .text.uTask    0x0000000008005440      0x10c ./app/uart/u.o
+                0x0000000008005440                uTask
  .text.HAL_TIM_PeriodElapsedCallback
-                0x00000000080054f0      0x110 ./app/uart/u.o
-                0x00000000080054f0                HAL_TIM_PeriodElapsedCallback
+                0x000000000800554c      0x110 ./app/uart/u.o
+                0x000000000800554c                HAL_TIM_PeriodElapsedCallback
  .text.HAL_UART_RxCpltCallback
-                0x0000000008005600       0x2c ./app/uart/u.o
-                0x0000000008005600                HAL_UART_RxCpltCallback
- .text.HAL_UARTEx_RxEventCallback
-                0x000000000800562c       0x30 ./app/uart/u.o
-                0x000000000800562c                HAL_UARTEx_RxEventCallback
- .text.HAL_UART_TxCpltCallback
                 0x000000000800565c       0x2c ./app/uart/u.o
-                0x000000000800565c                HAL_UART_TxCpltCallback
+                0x000000000800565c                HAL_UART_RxCpltCallback
+ .text.HAL_UARTEx_RxEventCallback
+                0x0000000008005688       0x30 ./app/uart/u.o
+                0x0000000008005688                HAL_UARTEx_RxEventCallback
+ .text.HAL_UART_TxCpltCallback
+                0x00000000080056b8       0x2c ./app/uart/u.o
+                0x00000000080056b8                HAL_UART_TxCpltCallback
  .text.__libc_init_array
-                0x0000000008005688       0x48 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
-                0x0000000008005688                __libc_init_array
- .text.memset   0x00000000080056d0       0x10 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
-                0x00000000080056d0                memset
+                0x00000000080056e4       0x48 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
+                0x00000000080056e4                __libc_init_array
+ .text.memset   0x000000000800572c       0x10 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+                0x000000000800572c                memset
  *(.glue_7)
- .glue_7        0x00000000080056e0        0x0 linker stubs
+ .glue_7        0x000000000800573c        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x00000000080056e0        0x0 linker stubs
+ .glue_7t       0x000000000800573c        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x00000000080056e0        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .eh_frame      0x000000000800573c        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
  *(.init)
- .init          0x00000000080056e0        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crti.o
-                0x00000000080056e0                _init
- .init          0x00000000080056e4        0x8 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtn.o
+ .init          0x000000000800573c        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crti.o
+                0x000000000800573c                _init
+ .init          0x0000000008005740        0x8 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtn.o
  *(.fini)
- .fini          0x00000000080056ec        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crti.o
-                0x00000000080056ec                _fini
- .fini          0x00000000080056f0        0x8 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtn.o
-                0x00000000080056f8                . = ALIGN (0x4)
-                0x00000000080056f8                _etext = .
+ .fini          0x0000000008005748        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crti.o
+                0x0000000008005748                _fini
+ .fini          0x000000000800574c        0x8 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtn.o
+                0x0000000008005754                . = ALIGN (0x4)
+                0x0000000008005754                _etext = .
 
-.vfp11_veneer   0x00000000080056f8        0x0
- .vfp11_veneer  0x00000000080056f8        0x0 linker stubs
+.vfp11_veneer   0x0000000008005754        0x0
+ .vfp11_veneer  0x0000000008005754        0x0 linker stubs
 
-.v4_bx          0x00000000080056f8        0x0
- .v4_bx         0x00000000080056f8        0x0 linker stubs
+.v4_bx          0x0000000008005754        0x0
+ .v4_bx         0x0000000008005754        0x0 linker stubs
 
-.iplt           0x00000000080056f8        0x0
- .iplt          0x00000000080056f8        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
+.iplt           0x0000000008005754        0x0
+ .iplt          0x0000000008005754        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.rodata         0x00000000080056f8      0x12c
-                0x00000000080056f8                . = ALIGN (0x4)
+.rodata         0x0000000008005754      0x130
+                0x0000000008005754                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x00000000080056f8       0xf2 ./app/uart/u.o
+ .rodata        0x0000000008005754       0xf6 ./app/uart/u.o
  *(.rodata*)
- *fill*         0x00000000080057ea        0x2 
+ *fill*         0x000000000800584a        0x2 
  .rodata.AHBPrescTable
-                0x00000000080057ec       0x10 ./Core/Src/system_stm32f3xx.o
-                0x00000000080057ec                AHBPrescTable
+                0x000000000800584c       0x10 ./Core/Src/system_stm32f3xx.o
+                0x000000000800584c                AHBPrescTable
  .rodata.APBPrescTable
-                0x00000000080057fc        0x8 ./Core/Src/system_stm32f3xx.o
-                0x00000000080057fc                APBPrescTable
+                0x000000000800585c        0x8 ./Core/Src/system_stm32f3xx.o
+                0x000000000800585c                APBPrescTable
  .rodata.aPLLMULFactorTable
-                0x0000000008005804       0x10 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o
+                0x0000000008005864       0x10 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o
  .rodata.aPredivFactorTable
-                0x0000000008005814       0x10 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o
-                0x0000000008005824                . = ALIGN (0x4)
+                0x0000000008005874       0x10 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.o
+                0x0000000008005884                . = ALIGN (0x4)
 
-.rel.dyn        0x0000000008005824        0x0
- .rel.iplt      0x0000000008005824        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
+.rel.dyn        0x0000000008005884        0x0
+ .rel.iplt      0x0000000008005884        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.ARM.extab      0x0000000008005824        0x0
-                0x0000000008005824                . = ALIGN (0x4)
+.ARM.extab      0x0000000008005884        0x0
+                0x0000000008005884                . = ALIGN (0x4)
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000008005824                . = ALIGN (0x4)
+                0x0000000008005884                . = ALIGN (0x4)
 
-.ARM            0x0000000008005824        0x0
-                0x0000000008005824                . = ALIGN (0x4)
-                0x0000000008005824                __exidx_start = .
+.ARM            0x0000000008005884        0x0
+                0x0000000008005884                . = ALIGN (0x4)
+                0x0000000008005884                __exidx_start = .
  *(.ARM.exidx*)
-                0x0000000008005824                __exidx_end = .
-                0x0000000008005824                . = ALIGN (0x4)
+                0x0000000008005884                __exidx_end = .
+                0x0000000008005884                . = ALIGN (0x4)
 
-.preinit_array  0x0000000008005824        0x0
-                0x0000000008005824                . = ALIGN (0x4)
-                0x0000000008005824                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x0000000008005884        0x0
+                0x0000000008005884                . = ALIGN (0x4)
+                0x0000000008005884                PROVIDE (__preinit_array_start = .)
  *(.preinit_array*)
-                0x0000000008005824                PROVIDE (__preinit_array_end = .)
-                0x0000000008005824                . = ALIGN (0x4)
+                0x0000000008005884                PROVIDE (__preinit_array_end = .)
+                0x0000000008005884                . = ALIGN (0x4)
 
-.init_array     0x0000000008005824        0x4
-                0x0000000008005824                . = ALIGN (0x4)
-                0x0000000008005824                PROVIDE (__init_array_start = .)
+.init_array     0x0000000008005884        0x4
+                0x0000000008005884                . = ALIGN (0x4)
+                0x0000000008005884                PROVIDE (__init_array_start = .)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array*)
- .init_array    0x0000000008005824        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
-                0x0000000008005828                PROVIDE (__init_array_end = .)
-                0x0000000008005828                . = ALIGN (0x4)
+ .init_array    0x0000000008005884        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
+                0x0000000008005888                PROVIDE (__init_array_end = .)
+                0x0000000008005888                . = ALIGN (0x4)
 
-.fini_array     0x0000000008005828        0x4
-                0x0000000008005828                . = ALIGN (0x4)
+.fini_array     0x0000000008005888        0x4
+                0x0000000008005888                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__fini_array_start = .)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0000000008005828        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .fini_array    0x0000000008005888        0x4 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
                 [!provide]                        PROVIDE (__fini_array_end = .)
-                0x000000000800582c                . = ALIGN (0x4)
-                0x000000000800582c                _sidata = LOADADDR (.data)
+                0x000000000800588c                . = ALIGN (0x4)
+                0x000000000800588c                _sidata = LOADADDR (.data)
 
-.data           0x0000000020000000      0x644 load address 0x000000000800582c
+.data           0x0000000020000000      0x684 load address 0x000000000800588c
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                _sdata = .
  *(.data)
@@ -3595,32 +3595,34 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .data.mErrOk   0x0000000020000010       0x20 ./app/uart/u.o
  .data.mErrNOk  0x0000000020000030       0x12 ./app/uart/u.o
  *fill*         0x0000000020000042        0x2 
- .data.mPrompt  0x0000000020000044        0x7 ./app/uart/u.o
- *fill*         0x000000002000004b        0x1 
+ .data.mPrompt  0x0000000020000044        0x5 ./app/uart/u.o
+ *fill*         0x0000000020000049        0x3 
  .data.encData  0x000000002000004c       0x46 ./app/uart/u.o
  *fill*         0x0000000020000092        0x2 
  .data.otpData  0x0000000020000094      0x120 ./app/uart/u.o
  .data.OTPDataRanges
                 0x00000000200001b4       0x40 ./app/uart/u.o
+ .data.OTPDataElementsFormating
+                0x00000000200001f4       0x40 ./app/uart/u.o
  .data.menuOTPDescrHeader
-                0x00000000200001f4       0x59 ./app/uart/u.o
- *fill*         0x000000002000024d        0x3 
+                0x0000000020000234       0x59 ./app/uart/u.o
+ *fill*         0x000000002000028d        0x3 
  .data.menuOTPDescrActualData
-                0x0000000020000250       0x58 ./app/uart/u.o
+                0x0000000020000290       0x58 ./app/uart/u.o
  .data.menuOTPDescrDesiredData
-                0x00000000200002a8      0x369 ./app/uart/u.o
- *fill*         0x0000000020000611        0x3 
- .data.menu     0x0000000020000614       0x30 ./app/uart/u.o
+                0x00000000200002e8      0x369 ./app/uart/u.o
+ *fill*         0x0000000020000651        0x3 
+ .data.menu     0x0000000020000654       0x30 ./app/uart/u.o
  *(.RamFunc)
  *(.RamFunc*)
-                0x0000000020000644                . = ALIGN (0x4)
-                0x0000000020000644                _edata = .
-                0x0000000008005e70                _siccmram = LOADADDR (.ccmram)
+                0x0000000020000684                . = ALIGN (0x4)
+                0x0000000020000684                _edata = .
+                0x0000000008005f10                _siccmram = LOADADDR (.ccmram)
 
-.igot.plt       0x0000000020000644        0x0 load address 0x0000000008005e70
- .igot.plt      0x0000000020000644        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
+.igot.plt       0x0000000020000684        0x0 load address 0x0000000008005f10
+ .igot.plt      0x0000000020000684        0x0 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
 
-.ccmram         0x0000000010000000        0x0 load address 0x0000000008005e70
+.ccmram         0x0000000010000000        0x0 load address 0x0000000008005f10
                 0x0000000010000000                . = ALIGN (0x4)
                 0x0000000010000000                _sccmram = .
  *(.ccmram)
@@ -3629,109 +3631,109 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
                 0x0000000010000000                _eccmram = .
                 0x0000000010000000                . = ALIGN (0x4)
 
-.bss            0x0000000020000644      0x5c8
-                0x0000000020000644                _sbss = .
-                0x0000000020000644                __bss_start__ = _sbss
+.bss            0x0000000020000684      0x5c8
+                0x0000000020000684                _sbss = .
+                0x0000000020000684                __bss_start__ = _sbss
  *(.bss)
- .bss           0x0000000020000644       0x1c c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
+ .bss           0x0000000020000684       0x1c c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard/crtbegin.o
  *(.bss*)
- .bss.htim1     0x0000000020000660       0x4c ./Core/Src/main.o
-                0x0000000020000660                htim1
- .bss.huart3    0x00000000200006ac       0x88 ./Core/Src/main.o
-                0x00000000200006ac                huart3
+ .bss.htim1     0x00000000200006a0       0x4c ./Core/Src/main.o
+                0x00000000200006a0                htim1
+ .bss.huart3    0x00000000200006ec       0x88 ./Core/Src/main.o
+                0x00000000200006ec                huart3
  .bss.hdma_usart3_tx
-                0x0000000020000734       0x44 ./Core/Src/main.o
-                0x0000000020000734                hdma_usart3_tx
+                0x0000000020000774       0x44 ./Core/Src/main.o
+                0x0000000020000774                hdma_usart3_tx
  .bss.hdma_usart3_rx
-                0x0000000020000778       0x44 ./Core/Src/main.o
-                0x0000000020000778                hdma_usart3_rx
+                0x00000000200007b8       0x44 ./Core/Src/main.o
+                0x00000000200007b8                hdma_usart3_rx
  .bss.cntClkRisingEdge
-                0x00000000200007bc        0x4 ./Core/Src/main.o
-                0x00000000200007bc                cntClkRisingEdge
- .bss.mData     0x00000000200007c0        0x2 ./Core/Src/main.o
-                0x00000000200007c0                mData
- *fill*         0x00000000200007c2        0x2 
- .bss.mSysTick  0x00000000200007c4        0x4 ./Core/Src/main.o
-                0x00000000200007c4                mSysTick
- .bss.oldTick   0x00000000200007c8        0x4 ./Core/Src/main.o
-                0x00000000200007c8                oldTick
- .bss.oldBtn    0x00000000200007cc        0x4 ./Core/Src/main.o
-                0x00000000200007cc                oldBtn
+                0x00000000200007fc        0x4 ./Core/Src/main.o
+                0x00000000200007fc                cntClkRisingEdge
+ .bss.mData     0x0000000020000800        0x2 ./Core/Src/main.o
+                0x0000000020000800                mData
+ *fill*         0x0000000020000802        0x2 
+ .bss.mSysTick  0x0000000020000804        0x4 ./Core/Src/main.o
+                0x0000000020000804                mSysTick
+ .bss.oldTick   0x0000000020000808        0x4 ./Core/Src/main.o
+                0x0000000020000808                oldTick
+ .bss.oldBtn    0x000000002000080c        0x4 ./Core/Src/main.o
+                0x000000002000080c                oldBtn
  .bss.csPinState
-                0x00000000200007d0        0x1 ./Core/Src/main.o
-                0x00000000200007d0                csPinState
+                0x0000000020000810        0x1 ./Core/Src/main.o
+                0x0000000020000810                csPinState
  .bss.dataPinState
-                0x00000000200007d1        0x1 ./Core/Src/main.o
-                0x00000000200007d1                dataPinState
+                0x0000000020000811        0x1 ./Core/Src/main.o
+                0x0000000020000811                dataPinState
  .bss.clkPinState
-                0x00000000200007d2        0x1 ./Core/Src/main.o
-                0x00000000200007d2                clkPinState
- .bss.pState    0x00000000200007d3        0x1 ./Core/Src/main.o
-                0x00000000200007d3                pState
+                0x0000000020000812        0x1 ./Core/Src/main.o
+                0x0000000020000812                clkPinState
+ .bss.pState    0x0000000020000813        0x1 ./Core/Src/main.o
+                0x0000000020000813                pState
  .bss.oldpState
-                0x00000000200007d4        0x1 ./Core/Src/main.o
-                0x00000000200007d4                oldpState
+                0x0000000020000814        0x1 ./Core/Src/main.o
+                0x0000000020000814                oldpState
  .bss.doInputMode
-                0x00000000200007d5        0x1 ./Core/Src/main.o
-                0x00000000200007d5                doInputMode
+                0x0000000020000815        0x1 ./Core/Src/main.o
+                0x0000000020000815                doInputMode
  .bss.evTim1Tick
-                0x00000000200007d6        0x1 ./Core/Src/main.o
-                0x00000000200007d6                evTim1Tick
+                0x0000000020000816        0x1 ./Core/Src/main.o
+                0x0000000020000816                evTim1Tick
  .bss.cPStateBuf
-                0x00000000200007d7        0x1 ./Core/Src/main.o
-                0x00000000200007d7                cPStateBuf
+                0x0000000020000817        0x1 ./Core/Src/main.o
+                0x0000000020000817                cPStateBuf
  .bss.btnPressed
-                0x00000000200007d8        0x1 ./Core/Src/main.o
-                0x00000000200007d8                btnPressed
- *fill*         0x00000000200007d9        0x3 
- .bss.uwTick    0x00000000200007dc        0x4 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o
-                0x00000000200007dc                uwTick
- .bss.iCnt      0x00000000200007e0        0x1 ./app/uart/u.o
-                0x00000000200007e0                iCnt
- *fill*         0x00000000200007e1        0x3 
+                0x0000000020000818        0x1 ./Core/Src/main.o
+                0x0000000020000818                btnPressed
+ *fill*         0x0000000020000819        0x3 
+ .bss.uwTick    0x000000002000081c        0x4 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.o
+                0x000000002000081c                uwTick
+ .bss.iCnt      0x0000000020000820        0x1 ./app/uart/u.o
+                0x0000000020000820                iCnt
+ *fill*         0x0000000020000821        0x3 
  .bss.uartRxBuf
-                0x00000000200007e4        0xa ./app/uart/u.o
- .bss.menuSize  0x00000000200007ee        0x1 ./app/uart/u.o
- *fill*         0x00000000200007ef        0x1 
- .bss.uartMenu  0x00000000200007f0      0x400 ./app/uart/u.o
- .bss.uState    0x0000000020000bf0        0x1 ./app/uart/u.o
+                0x0000000020000824        0xa ./app/uart/u.o
+ .bss.menuSize  0x000000002000082e        0x1 ./app/uart/u.o
+ *fill*         0x000000002000082f        0x1 
+ .bss.uartMenu  0x0000000020000830      0x400 ./app/uart/u.o
+ .bss.uState    0x0000000020000c30        0x1 ./app/uart/u.o
  .bss.fLedMagHiToggled
-                0x0000000020000bf1        0x1 ./app/uart/u.o
+                0x0000000020000c31        0x1 ./app/uart/u.o
  .bss.fLedMagLoToggled
-                0x0000000020000bf2        0x1 ./app/uart/u.o
- .bss.ssiMode   0x0000000020000bf3        0x1 ./app/uart/u.o
- .bss.cOtpClk   0x0000000020000bf4        0x4 ./app/uart/u.o
- .bss.cOtpData  0x0000000020000bf8        0x4 ./app/uart/u.o
+                0x0000000020000c32        0x1 ./app/uart/u.o
+ .bss.ssiMode   0x0000000020000c33        0x1 ./app/uart/u.o
+ .bss.cOtpClk   0x0000000020000c34        0x4 ./app/uart/u.o
+ .bss.cOtpData  0x0000000020000c38        0x4 ./app/uart/u.o
  .bss.ssiClkEdgesNb
-                0x0000000020000bfc        0x1 ./app/uart/u.o
- .bss.fUARTRx   0x0000000020000bfd        0x1 ./app/uart/u.o
- .bss.fUARTTx   0x0000000020000bfe        0x1 ./app/uart/u.o
+                0x0000000020000c3c        0x1 ./app/uart/u.o
+ .bss.fUARTRx   0x0000000020000c3d        0x1 ./app/uart/u.o
+ .bss.fUARTTx   0x0000000020000c3e        0x1 ./app/uart/u.o
  .bss.fWaitSSITransfer
-                0x0000000020000bff        0x1 ./app/uart/u.o
+                0x0000000020000c3f        0x1 ./app/uart/u.o
  .bss.fParseSSIRxData
-                0x0000000020000c00        0x1 ./app/uart/u.o
+                0x0000000020000c40        0x1 ./app/uart/u.o
  .bss.fInvalidCommand
-                0x0000000020000c01        0x1 ./app/uart/u.o
- .bss.encVal    0x0000000020000c02        0x2 ./app/uart/u.o
- .bss.tim1Tick  0x0000000020000c04        0x4 ./app/uart/u.o
+                0x0000000020000c41        0x1 ./app/uart/u.o
+ .bss.encVal    0x0000000020000c42        0x2 ./app/uart/u.o
+ .bss.tim1Tick  0x0000000020000c44        0x4 ./app/uart/u.o
  .bss.cntWaitOTPWriteStatusFlags
-                0x0000000020000c08        0x4 ./app/uart/u.o
+                0x0000000020000c48        0x4 ./app/uart/u.o
  *(COMMON)
-                0x0000000020000c0c                . = ALIGN (0x4)
-                0x0000000020000c0c                _ebss = .
-                0x0000000020000c0c                __bss_end__ = _ebss
+                0x0000000020000c4c                . = ALIGN (0x4)
+                0x0000000020000c4c                _ebss = .
+                0x0000000020000c4c                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x0000000020000c0c      0x604
-                0x0000000020000c10                . = ALIGN (0x8)
- *fill*         0x0000000020000c0c        0x4 
+                0x0000000020000c4c      0x604
+                0x0000000020000c50                . = ALIGN (0x8)
+ *fill*         0x0000000020000c4c        0x4 
                 [!provide]                        PROVIDE (end = .)
-                0x0000000020000c10                PROVIDE (_end = .)
-                0x0000000020000e10                . = (. + _Min_Heap_Size)
- *fill*         0x0000000020000c10      0x200 
-                0x0000000020001210                . = (. + _Min_Stack_Size)
- *fill*         0x0000000020000e10      0x400 
-                0x0000000020001210                . = ALIGN (0x8)
+                0x0000000020000c50                PROVIDE (_end = .)
+                0x0000000020000e50                . = (. + _Min_Heap_Size)
+ *fill*         0x0000000020000c50      0x200 
+                0x0000000020001250                . = (. + _Min_Stack_Size)
+ *fill*         0x0000000020000e50      0x400 
+                0x0000000020001250                . = ALIGN (0x8)
 
 /DISCARD/
  libc.a(*)
@@ -3789,7 +3791,7 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
 LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libm.a
 LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v7e-m+fp/hard\libgcc.a
 
-.debug_info     0x0000000000000000    0x1163d
+.debug_info     0x0000000000000000    0x11661
  .debug_info    0x0000000000000000     0x1692 ./Core/Src/main.o
  .debug_info    0x0000000000001692     0x1021 ./Core/Src/stm32f3xx_hal_msp.o
  .debug_info    0x00000000000026b3      0xb54 ./Core/Src/stm32f3xx_it.o
@@ -3805,7 +3807,7 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_info    0x000000000000a36e     0x16a8 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o
  .debug_info    0x000000000000ba16     0x3bf8 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o
  .debug_info    0x000000000000f60e      0xd2e ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o
- .debug_info    0x000000000001033c     0x1301 ./app/uart/u.o
+ .debug_info    0x000000000001033c     0x1325 ./app/uart/u.o
 
 .debug_abbrev   0x0000000000000000     0x2259
  .debug_abbrev  0x0000000000000000      0x295 ./Core/Src/main.o
@@ -3936,7 +3938,7 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x000000000001ff06      0x1d7 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o
  .debug_macro   0x00000000000200dd      0x214 ./app/uart/u.o
 
-.debug_line     0x0000000000000000    0x11284
+.debug_line     0x0000000000000000    0x112d7
  .debug_line    0x0000000000000000      0x92a ./Core/Src/main.o
  .debug_line    0x000000000000092a      0x7c0 ./Core/Src/stm32f3xx_hal_msp.o
  .debug_line    0x00000000000010ea      0x811 ./Core/Src/stm32f3xx_it.o
@@ -3952,9 +3954,9 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_line    0x000000000000aea2     0x1ab5 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o
  .debug_line    0x000000000000c957     0x30ef ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o
  .debug_line    0x000000000000fa46      0xb11 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o
- .debug_line    0x0000000000010557      0xd2d ./app/uart/u.o
+ .debug_line    0x0000000000010557      0xd80 ./app/uart/u.o
 
-.debug_str      0x0000000000000000    0xc6f2c
+.debug_str      0x0000000000000000    0xc6f51
  .debug_str     0x0000000000000000    0xc3cd9 ./Core/Src/main.o
                                       0xc4593 (size before relaxing)
  .debug_str     0x00000000000c3cd9       0xcc ./Core/Src/stm32f3xx_hal_msp.o
@@ -3985,8 +3987,8 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
                                       0xc3c7e (size before relaxing)
  .debug_str     0x00000000000c69a1      0x1b8 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o
                                       0xc3583 (size before relaxing)
- .debug_str     0x00000000000c6b59      0x3d3 ./app/uart/u.o
-                                      0xc3ead (size before relaxing)
+ .debug_str     0x00000000000c6b59      0x3f8 ./app/uart/u.o
+                                      0xc3ed2 (size before relaxing)
 
 .comment        0x0000000000000000       0x50
  .comment       0x0000000000000000       0x50 ./Core/Src/main.o
@@ -4006,7 +4008,7 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .comment       0x0000000000000050       0x51 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o
  .comment       0x0000000000000050       0x51 ./app/uart/u.o
 
-.debug_frame    0x0000000000000000     0x3898
+.debug_frame    0x0000000000000000     0x389c
  .debug_frame   0x0000000000000000       0xf4 ./Core/Src/main.o
  .debug_frame   0x00000000000000f4       0xc8 ./Core/Src/stm32f3xx_hal_msp.o
  .debug_frame   0x00000000000001bc      0x174 ./Core/Src/stm32f3xx_it.o
@@ -4021,6 +4023,6 @@ LOAD c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_frame   0x00000000000023f0      0x688 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.o
  .debug_frame   0x0000000000002a78      0x9e8 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.o
  .debug_frame   0x0000000000003460      0x1b4 ./Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.o
- .debug_frame   0x0000000000003614      0x238 ./app/uart/u.o
- .debug_frame   0x000000000000384c       0x2c c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
- .debug_frame   0x0000000000003878       0x20 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x0000000000003614      0x23c ./app/uart/u.o
+ .debug_frame   0x0000000000003850       0x2c c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-init.o)
+ .debug_frame   0x000000000000387c       0x20 c:/st/stm32cubeide_1.10.1/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.10.3-2021.10.win32_1.0.200.202301161003/tools/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(lib_a-memset.o)
