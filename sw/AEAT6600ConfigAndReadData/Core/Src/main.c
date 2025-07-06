@@ -160,7 +160,7 @@ int main(void)
   MX_TIM1_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin|ssiClk_Pin|ssiDO_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin|ssiClk_Pin|ssiDIO_Pin, GPIO_PIN_SET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -170,7 +170,7 @@ int main(void)
 //	  uint8_t nBtn = GPIO_PIN_RESET;
 //	  nBtn = HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin);
 	  mSysTick = HAL_GetTick();
-	  if ( (oldTick!=mSysTick) && (0u == (mSysTick%25)) )
+	  if ( (oldTick!=mSysTick) /*&& (0u == (mSysTick%25))*/ )
 	  {
 //		  mData16 = ((((uint16_t)mData[1]&0x3F)<<8) + mData[0])>>4;
 //		  HAL_GPIO_TogglePin(GPIOA, ssiNCS_Pin);
@@ -353,7 +353,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOG_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin|ssiClk_Pin|ssiDO_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, ssiNCS_Pin|ssiClk_Pin|ssiDIO_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LD1_Pin|testPin_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
@@ -384,12 +384,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(ssiClk_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : ssiDO_Pin */
-  GPIO_InitStruct.Pin = ssiDO_Pin;
+  /*Configure GPIO pin : ssiDIO_Pin */
+  GPIO_InitStruct.Pin = ssiDIO_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(ssiDO_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(ssiDIO_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LD1_Pin LD3_Pin */
   GPIO_InitStruct.Pin = LD1_Pin|LD3_Pin;

@@ -19,8 +19,8 @@ static void programOTPData( void);
 
 
 typedef struct {
-    char *optionName;
-    char *helpText;
+    char optionName[2];
+    char helpText[100];
     void (*action)(void);
 } MenuItem;
 
@@ -53,8 +53,8 @@ static uint8_t menuSize;
 static uint8_t mErrOk[]="command executed successfully\r\n";
 static uint8_t mErrNOk[]="invalid command\r\n";
 static uint8_t mPrompt[]="cmd:";
-static uint8_t uartMenu[1024];
-static uint8_t uState;
+static uint8_t uartMenu[2048];
+static uStates uState;
 static uint8_t fLedMagHiToggled;
 static uint8_t fLedMagLoToggled;
 static uint8_t ssiMode;
@@ -62,6 +62,7 @@ static uint8_t *cOtpClk;
 static uint8_t *cOtpData;
 static uint8_t ssiClkEdgesNb;
 static uint8_t fUARTRx;
+static uint8_t timUARTRx;
 static uint8_t fUARTTx;
 static uint8_t fWaitSSITransfer;
 static uint8_t fParseSSIRxData;
@@ -114,13 +115,18 @@ static uint8_t menuOTPDescrDesiredData[]=
 |      [3,4] modeLo.IndexPulseWidth = 0										\r\n\
 [0..2] modeLo.IncResolution = 0												\r\n";
 
+
+//TODO MiPa test so command; ge, go and po look OK in logic analyzer; TODO test them with real encoder attached;
+
 // Define menu items
 static MenuItem menu[] = {
-    {"ge", "ge - get encoder value", getEncVal},
-	{"go", "go - get current OTP data", getOTPVal},
-    {"so,","so,<pos>,<0xval> - set OTP field; replace <pos> with the field bit position and <0xval> with the desired field value in hex", setOTPField},
-    {"po", "po - program the OTP data", programOTPData}
+    {"ge", "ge - get encoder value\r\n", getEncVal},
+	{"go", "go - get current OTP data\r\n", getOTPVal},
+    {"so","so,<pos>,<0xval> - set OTP field; <pos> bit position\r\n", setOTPField},
+    {"po", "po - program the OTP data\r\n", programOTPData}
 };
+
+static char dbgChoice[10];
 
 uint32_t myAtoUi(const uint8_t *str) {
     uint32_t i = 0u;
@@ -268,11 +274,12 @@ static uint16_t prepareMenu( void ) {
 		uartMenu[lIdxuMenu] = encValDescr[lIdxuMenu];
 	}
 	//get digits
-	encValTextRev[0] = encVal % 10u;
+	encValTextRev[0] = lencVal % 10u;
 	lIdx = 1u;
 	while (lencVal != 0u)
 	{
-		encValTextRev[lIdx++] = (lencVal / 10u) % 10u ;
+		lencVal /= 10u;
+		encValTextRev[lIdx++] = lencVal % 10u ;
 	}
 	//put encoder value digits in the buffer (in correct order from most significant digit to less significant one)
 	while ( lIdx > 0u )
@@ -321,7 +328,7 @@ static uint16_t prepareMenu( void ) {
     		lIdxuMenu++;
     	}
     }
-    if ( 0u != fInvalidCommand )
+    if ( 1u == fInvalidCommand )
     {//command NOK
     	fInvalidCommand = 0u;
     	for (lIdx=0u; lIdx<sizeof(mErrNOk); lIdx++)
@@ -330,14 +337,14 @@ static uint16_t prepareMenu( void ) {
     		lIdxuMenu++;
     	}
     }
-    else
+    else if ( 0u == fInvalidCommand)
     {//command OK
     	for (lIdx=0u; lIdx<sizeof(mErrOk); lIdx++)
     	{
     		uartMenu[lIdxuMenu] = mErrOk[lIdx];
     		lIdxuMenu++;
     	}
-    }
+    }else{/*no command was executed - nothing to print*/}
 
 	for (lIdx=0u; lIdx<sizeof(mPrompt); lIdx++)
 	{
@@ -354,9 +361,6 @@ static void processChoice(uint8_t choice[]) {
 	uint8_t lMenuItem = 0u;
 	uint8_t lFound = 0u;
 
-
-	//TODO MiPa aici - debug this code; the commands are not compared correctly
-
 	for (/*lMenuItem initialized above*/; lMenuItem<menuSize; lMenuItem++)
 	{
 		lFound = 1u;
@@ -364,6 +368,7 @@ static void processChoice(uint8_t choice[]) {
 		{
 			if (choice[lIdx] != menu[lMenuItem].optionName[lIdx])
 			{
+				dbgChoice[lIdx] = choice[lIdx];
 				lFound = 0u;
 			}
 		}
@@ -404,7 +409,7 @@ void uInit( void )
 	fUARTRx = 0u;
 	cntWaitOTPWriteStatusFlags = 0u;
 
-	fInvalidCommand = 0u;
+	fInvalidCommand = 0xFFu;
 
 	cOtpClk = &otpData[read][clk][0];
 	cOtpData = &otpData[read][dat][0];
@@ -415,10 +420,19 @@ void uInit( void )
 void uTask( void ) {
 	uint16_t uartDataSize = 0u;
 
+	if ( timUARTRx > 0u )
+	{
+		timUARTRx--;
+		if ( 0u == timUARTRx )
+		{//time just expired
+			fUARTRx = 1u;
+		}
+	}
+
 	switch (uState)
 	{
 	case eInit:
-		if ( iCnt > 20u )
+		if ( iCnt > 200u )
 		{
 			uState = eWaitChoiceActions; //in this state the menu will be sent over UART to the PC terminal application
 		}
@@ -478,11 +492,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	HAL_GPIO_WritePin(GPIOA, ssiClk_Pin, cOtpClk[tim1Tick]);
 	if (write == ssiMode)
 	{
-		HAL_GPIO_WritePin(GPIOA, ssiDO_Pin, cOtpData[tim1Tick]);
+		HAL_GPIO_WritePin(GPIOA, ssiDIO_Pin, cOtpData[tim1Tick]);
 	}
 	else
 	{
-		cOtpData[tim1Tick] = HAL_GPIO_ReadPin(GPIOA, ssiDO_Pin); //read on every edge but later use only the data sampled on falling edge
+		cOtpData[tim1Tick] = HAL_GPIO_ReadPin(GPIOA, ssiDIO_Pin); //read on every edge but later use only the data sampled on falling edge
 	}
 	HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin); //led shows the TX status
 
@@ -519,6 +533,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	if ( USART3 == huart->Instance)
 	{
 		fUARTRx = 1u;
+		timUARTRx = 0u;
 	}
 }
 
@@ -526,7 +541,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) //call
 {
 	if ( USART3 == huart->Instance)
 	{
-		fUARTRx = 1u;
+		timUARTRx = 200u; //wait time until command is completely received
 	}
 }
 
