@@ -47,7 +47,7 @@ extern TIM_HandleTypeDef htim1;
 uint8_t iCnt;
 
 
-static uint8_t uartRxBuf[10];
+static uint8_t uartRxBuf[12]; //max command is so16,65535\r\n
 static uint8_t encResolution[]={10u,12u,14u,16u};
 static uint8_t menuSize;
 static uint8_t mErrOk[]="command executed successfully\r\n";
@@ -89,12 +89,13 @@ static uint8_t otpData[2][2][NB_OF_CLK_EDGES] =
    /*DI*/  {1,1,          1,1, /*data*/0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 1,1,0,0,0,0,1,1, 0,0,0,0,0,0,0,0, 0,0,1,1,1,1,1,1,        1, 1, 0, 0 }},
 };
 static uint16_t OTPDataRanges[]={7,0,0,3,0,0,0,1,3,0,1,1,1,1,1,1,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+static uint16_t OTPDataBitNo[]=	{3,0,0,2,0,0,0,1,2,0,1,1,1,1,1,1,16	  ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 static uint16_t OTPDataElementsFormating[]={2,2,3,2,3,2,3,3,2,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0};
 
 
 //static uint8_t OTPDataBitPos[NB_OF_OTP_ELEMS]={0,3,5,7,8,10,11,12,13,14,15,16};
 static uint8_t menuOTPDescrHeader[]=
-"0 1 2  3 4  5 6  7  8 9  10 11 12 13 14 15 16          ..                31  \r\n\
+"bit nb. \r\n0 1 2  3 4  5 6  7  8 9  10 11 12 13 14 15 16          ..                31  \r\n\
 actual \r\n";
 static uint8_t menuOTPDescrActualData[]=
 "0 0 0  0 0  . .  0  1 1  0  0  0  0  0  0  0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0	\r\n\
@@ -122,15 +123,17 @@ static uint8_t menuOTPDescrDesiredData[]=
 static MenuItem menu[] = {
     {"ge", "ge - get encoder value\r\n", getEncVal},
 	{"go", "go - get current OTP data\r\n", getOTPVal},
-    {"so","so,<pos>,<0xval> - set OTP field; <pos> bit position\r\n", setOTPField},
+    {"so","so<pos>,<val> - set OTP field; <pos> bit position\r\n", setOTPField},
     {"po", "po - program the OTP data\r\n", programOTPData}
 };
 
 static char dbgChoice[10];
 
-uint32_t myAtoUi(const uint8_t *str) {
+uint32_t myAtoUi(const uint8_t *str, uint8_t *status) {
     uint32_t i = 0u;
     uint32_t result = 0u;
+
+    *status = mOK;
 
     // Convert characters to integer
     while (str[i] >= '0' && str[i] <= '9') {
@@ -140,9 +143,9 @@ uint32_t myAtoUi(const uint8_t *str) {
         i++;
     }
 
-    if (str[i] != '\0' )
+    if (str[i] != '\0' && str[i] != '\r' )
     {
-    	fInvalidCommand = 1u;
+    	*status = mNOK;
     	result = 0xFFFFFFFFu;
     }
 
@@ -163,7 +166,7 @@ static void setConditionsFor(uint8_t reqAction)
 	}
 }
 
-static void getEncVal( void )
+static void getEncVal( void ) //TODO MiPa AICI add nbOfSamples parameter and print all the sample values before showing again the menu (use fixed sample time of 200 milliseconds)
 {
 	uint8_t encResolutionOTPVal = (otpData[read][dat][4+8*2]<<1) + otpData[read][dat][4+9*2]; //bits 9 and 8 contain the resolution configuration
 	setConditionsFor(eReadEncVal);
@@ -199,47 +202,58 @@ static void getOTPVal( void )
 static void setOTPField( void )
 {
 	uint8_t lIdx = 0u;
-	uint8_t lBitPosVal = 0u;
+	uint8_t bpVal = 0u;
 	uint32_t lOTPval = 0u;
 	uint8_t lOTPvalBits[16] = {0,};
+	uint8_t conversionStatus;
 
-	//read bit number (max 2 digits)
-	lIdx = 3u;
+	//command format so<bitNb>,<hexVal> (max 4 characters for value - Zero.poasition has 16 bits)
+	lIdx = 2u;
 	while ( (lIdx < 7u) && (uartRxBuf[lIdx] != ',') )
 	{
-		lBitPosVal = lBitPosVal << 1;
-		lBitPosVal += uartRxBuf[2+lIdx];
+		bpVal *= 10;
+		bpVal += uartRxBuf[lIdx]-'0';
 		lIdx++;
 	}
-	if ( lIdx <= 5u )
-	{//bit number was OK (max 2 digits)
-		if ( lBitPosVal < 16u )
-		{//bit position value is valid
-			//convert value from hex string to INT
-			lOTPval = myAtoUi(&uartRxBuf[lIdx]);
-			if ( 0u == fInvalidCommand )
-			{//Conversion successful
-				if ( OTPDataRanges[lBitPosVal] >= lOTPval )
-				{//value is in range
-					//update the otpData buffer used for writing
-					lIdx = 0u;
-					while (0u != lOTPval)
-					{
-						lIdx++;
-						lOTPvalBits[lIdx-1] = lOTPval % 2;
-						lOTPval >>= 1;
-					}
-					while (lIdx--)
-					{
-						otpData[write][dat][4+2*lBitPosVal+lIdx] = lOTPvalBits[lIdx-1];
-					}
+
+	if ( bpVal <= 16u )
+	{//bpVal in valid range
+		lIdx++;
+		//convert value from hex string to INT
+		lOTPval = myAtoUi(&uartRxBuf[lIdx],&conversionStatus);
+		if ( mOK == conversionStatus )
+		{//Conversion successful
+			if ( (OTPDataRanges[bpVal] != 0) && (OTPDataRanges[bpVal] >= lOTPval) )
+			{//value is in range
+				//update the otpData buffer used for writing
+				lIdx = 0u;
+				while (0u != lOTPval)
+				{
+					lOTPvalBits[lIdx] = lOTPval % 2;
+					lIdx++;
+					lOTPval >>= 1;
 				}
-			}else{/*error flag already set: nothing more to do here*/}
+				lIdx = OTPDataBitNo[bpVal];
+				while (lIdx > 0)
+				{
+					lIdx--;
+					otpData[write][dat][ 4 + (2 * (bpVal+lIdx)) 	] = lOTPvalBits[lIdx];
+					otpData[write][dat][ 4 + (2 * (bpVal+lIdx)) +1 	] = lOTPvalBits[lIdx];
+				}
+			}
+			else
+			{//conversion error
+				fInvalidCommand = 1u;
+			}
 		}
 		else
-		{
+		{//conversion error
 			fInvalidCommand = 1u;
 		}
+	}
+	else
+	{//invalid bit number
+		fInvalidCommand = 1u;
 	}
 }
 
@@ -284,7 +298,7 @@ static uint16_t prepareMenu( void ) {
 	//put encoder value digits in the buffer (in correct order from most significant digit to less significant one)
 	while ( lIdx > 0u )
 	{
-		uartMenu[lIdxuMenu++] = encValTextRev[lIdx--];
+		uartMenu[lIdxuMenu++] = encValTextRev[lIdx--]+'0';
 	}
 	uartMenu[lIdxuMenu++] = '\r';
 	uartMenu[lIdxuMenu++] = '\n';
@@ -356,12 +370,12 @@ static uint16_t prepareMenu( void ) {
 
 }
 
-static void processChoice(uint8_t choice[]) {
+static void processChoice(uint8_t *choice) {
 	uint8_t lIdx = 0u;
 	uint8_t lMenuItem = 0u;
 	uint8_t lFound = 0u;
 
-	for (/*lMenuItem initialized above*/; lMenuItem<menuSize; lMenuItem++)
+	while ( (lMenuItem<menuSize) && (lFound != 1u) )
 	{
 		lFound = 1u;
 		for (lIdx = 0u; lIdx<sizeof(menu[lMenuItem].optionName); lIdx++)
@@ -377,6 +391,8 @@ static void processChoice(uint8_t choice[]) {
 		{
 			menu[lMenuItem].action();
 		}
+
+		lMenuItem++;
 	}
 }
 

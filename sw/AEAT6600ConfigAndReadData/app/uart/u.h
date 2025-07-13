@@ -1,6 +1,9 @@
 #ifndef _U_H
 #define _U_H
 
+#define mOK 	0u
+#define mNOK 	1u
+
 enum
 {
 	read,
